@@ -1,6 +1,6 @@
 <div align="center">
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=20&duration=3000&pause=1000&color=00FF41&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Flutter+Developer+%7C+CS+Student+%40+NUML;Building%3A+DailyPulse+%C2%B7+FitGenie+%C2%B7+AI+Apps;Freelancer+%40+Fiverr+%7C+CodeAlpha+Intern;%3E+Turning+chai+%26+code+into+real+apps...)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=20&duration=3000&pause=1000&color=00FF41&center=true&vCenter=true&multiline=true&width=600&height=100&lines=Flutter+Developer+%7C+CS+Student+%40+NUML;BuildingApps+%3A+%C2%B7+Freelancer+%40+Fiverr+%7C+CodeAlpha+Intern;%3E+Turning+chai+%26+code+into+real+apps...)](https://git.io/typing-svg)
 
 ---
 
