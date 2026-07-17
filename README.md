@@ -35,17 +35,17 @@ Slack-style team collaboration app — real-time chat, DMs, user profiles, and m
 
 ## 🛠️ Tech Stack
 
-**Mobile:** Flutter · Dart
-**Backend:** Firebase (Auth, Firestore, Storage)
-**AI/ML:** Python · Gemini AI
+**Mobile:** Flutter · Dart<br>
+**Backend:** Firebase (Auth, Firestore, Storage)<br>
+**AI/ML:** Python · Gemini AI<br>
 **Other:** PHP · Laravel · C# · Assembly
 
 ## 📊 GitHub Stats
 
 <div align="center">
 
-![Fahad's GitHub stats](https://github-readme-stats.vercel.app/api?username=fahad2bhatti&show_icons=true&theme=radical)
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=fahad2bhatti&layout=compact&theme=radical)
+![Fahad's GitHub stats](https://github-readme-stats-sigma-five.vercel.app/api?username=fahad2bhatti&show_icons=true&theme=radical)
+![Top Langs](https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=fahad2bhatti&layout=compact&theme=radical)
 
 </div>
 
