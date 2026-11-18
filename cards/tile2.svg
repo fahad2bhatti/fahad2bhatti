@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="290" height="180" viewBox="0 0 290 180"><style>
+text{font-family:Georgia,'Times New Roman',serif}
+.sans{font-family:'Segoe UI',Helvetica,Arial,sans-serif}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}}
+@keyframes pop{from{opacity:0;transform:scale(.2)}}
+@keyframes grow{from{transform:scaleY(0)}}
+@keyframes fade{from{opacity:0}}
+@keyframes swing{from{opacity:0;transform:translateY(60px) rotate(-6deg)}60%{opacity:1;transform:translateY(-8px) rotate(1deg)}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(7px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.cell{transform-box:fill-box;transform-origin:center}
+.bar{transform-box:fill-box;transform-origin:bottom}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<g class="bar" style="animation:swing 1s 2.8s cubic-bezier(.2,.8,.2,1) backwards">
+<rect x="6" y="6" width="278" height="168" rx="20" fill="#e5484d"/>
+<text x="28" y="44" font-size="14" letter-spacing="3" fill="#ffffff" class="sans" opacity=".85">FREELANCE</text>
+<text x="28" y="108" font-size="32" fill="#ffffff">Fiverr</text>
+<text x="28" y="136" font-size="14" fill="#ffffff" class="sans" opacity=".85">Apps for clients</text>
+<text x="246" y="152" font-size="26" fill="#ffffff" class="sans" style="animation:nudge 2s ease-in-out infinite">→</text>
+</g></svg>
