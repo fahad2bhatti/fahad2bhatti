@@ -1,19 +1,24 @@
 import os, base64, urllib.request
 from pathlib import Path
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageFilter
 from fontTools import subset
 
 USER = "fahad2bhatti"
 FIRST = "Fahad"
-SECOND = "Bhatti"          # apna surname/doosra lafz yahan badlo
+SECOND = "Bhatti"
 LABEL = "FLUTTER DEVELOPER · NUML"
 LINE1 = "I build Flutter apps with Firebase and AI,"
 LINE2 = "and ship them solo."
 LINK = "github.com/fahad2bhatti"
 
-COLS = 80                  # portrait ki detail (zyada = zyada detail)
-CHAR_W, LINE_H, FS = 4.2, 7.6, 7
-RAMP = "@%#*+=-:. "        # dark -> light
+# portrait settings
+COLS = 64
+CHAR_W, LINE_H, FS = 5.5, 9.6, 9
+ROWS = int(COLS * CHAR_W / LINE_H)
+CROP = (0.25, 0.08, 0.75, 0.58)   # (left, top, right, bottom) photo ka hissa, 0..1
+RAMP = "@%#*+=-:. "                # dark -> light
+USE_REMBG = os.environ.get("NO_REMBG") != "1"
+
 INK, PAPER, MUTED, BLUE = "#1a1a1a", "#f4f3ef", "#6b665c", "#2563eb"
 STATIC = os.environ.get("STATIC") == "1"
 
@@ -47,24 +52,50 @@ def get_avatar():
         req = urllib.request.Request(f"https://github.com/{USER}.png?size=460",
                                      headers={"User-Agent": "Mozilla/5.0"})
         p.write_bytes(urllib.request.urlopen(req).read())
-    return Image.open(p)
+    return Image.open(p).convert("RGB")
 
 
-def ascii_rows(img):
-    img = ImageOps.grayscale(img.convert("RGB"))
+def make_rows():
+    img = get_avatar()
     w, h = img.size
-    s = min(w, h)
-    img = img.crop(((w - s) // 2, (h - s) // 2, (w + s) // 2, (h + s) // 2))
-    img = ImageOps.autocontrast(img, cutoff=2)
-    rows = int(COLS * (CHAR_W / LINE_H) * 1.0 * (h / h))  # square image
-    rows = int(COLS * CHAR_W / LINE_H)
-    img = img.resize((COLS, rows))
-    px = img.load()
-    out = []
-    for y in range(rows):
-        line = "".join(RAMP[int(px[x, y] / 256 * len(RAMP))] for x in range(COLS))
-        out.append(line.rstrip())
-    return out
+    l, t, r, b = CROP
+    img = img.crop((int(l * w), int(t * h), int(r * w), int(b * h)))
+
+    mask = None
+    if USE_REMBG:
+        try:
+            from rembg import remove, new_session
+            cut = remove(img, session=new_session("u2netp"))
+            mask = cut.split()[-1].resize((COLS, ROWS), Image.LANCZOS).load()
+            print("rembg: background hata diya")
+        except Exception as e:
+            print("rembg skip:", type(e).__name__, e)
+
+    g = ImageOps.grayscale(img)
+    g = ImageOps.autocontrast(g, cutoff=1)
+    g = g.filter(ImageFilter.UnsharpMask(radius=1.5, percent=180, threshold=2))
+    g = g.resize((COLS, ROWS), Image.LANCZOS)
+    px = g.load()
+
+    rows = []
+    for y in range(ROWS):
+        line = ""
+        for x in range(COLS):
+            if mask is not None and mask[x, y] < 110:
+                line += " "
+            else:
+                line += RAMP[min(len(RAMP) - 1, int(px[x, y] / 256 * len(RAMP)))]
+        rows.append(line.rstrip())
+    return rows
+
+
+def get_rows():
+    cache = Path("assets/portrait.txt")
+    if cache.exists() and os.environ.get("REBUILD") != "1":
+        return cache.read_text(encoding="utf-8").split("\n")
+    rows = make_rows()
+    cache.write_text("\n".join(rows), encoding="utf-8")
+    return rows
 
 
 def esc(t):
@@ -73,17 +104,17 @@ def esc(t):
 
 def build():
     fonts = get_fonts()
-    rows = ascii_rows(get_avatar())
+    rows = get_rows()
     W, H = 900, 430
-    px0 = 530
-    py0 = (H - len(rows) * LINE_H) / 2 + 6
+    px0 = 510
+    py0 = (H - len(rows) * LINE_H) / 2 + 4
     css = f"""
 @font-face{{font-family:'ISerif';src:url(data:font/woff;base64,{fonts['serif-400']})}}
 @font-face{{font-family:'ISerifI';src:url(data:font/woff;base64,{fonts['serif-400i']})}}
 .serif{{font-family:'ISerif',Georgia,serif}}
 .serifi{{font-family:'ISerifI',Georgia,serif;font-style:italic}}
 .sans{{font-family:'Segoe UI',Helvetica,Arial,sans-serif}}
-.mono{{font-family:'SFMono-Regular',Consolas,'Courier New',monospace}}
+.mono{{font-family:'SFMono-Regular',Consolas,'Liberation Mono','Courier New',monospace}}
 @keyframes rise{{from{{opacity:0;transform:translateY(20px)}}}}
 @keyframes fade{{from{{opacity:0}}}}
 @keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:.3}}}}
