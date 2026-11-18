@@ -196,7 +196,6 @@ def tile(i, label, bg, fg, big, small):
 def main():
     weeks = fetch_weeks()
     st = compute(weeks)
-    (OUT / "hero.svg").write_text(hero(), encoding="utf-8")
     (OUT / "graph.svg").write_text(graph(weeks, st), encoding="utf-8")
     (OUT / "months.svg").write_text(months_card(st), encoding="utf-8")
     for i, (label, bg, fg, big, small) in enumerate(TILES):
